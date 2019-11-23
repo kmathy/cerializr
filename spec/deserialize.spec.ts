@@ -10,7 +10,8 @@ import {
     deserializeAsJson,
     deserializeAsMap,
     deserializeUsing, SetDeserializeKeyTransform,
-    SetDefaultInstantiationMethod
+    SetDefaultInstantiationMethod,
+    NoOp
 }                                                   from "../src";
 import {InstantiationMethod, Indexable, JsonObject} from "../src/util";
 
@@ -58,9 +59,9 @@ describe("Deserializing", function () {
             }
 
             const instance = Deserialize({ value: 2 }, Test);
-            expect(instance.value).toBe(1);
+            expect(instance).not.toBeNull();
             expect(instance instanceof Test).toBe(true);
-
+            expect(instance!.value).toBe(1);
         });
 
     });
@@ -898,7 +899,7 @@ describe("Deserializing", function () {
 
                     const target = createTarget(makeTarget, instantiationMethod, Test);
                     const instance = Deserialize(json, Test, target, instantiationMethod);
-                    SetDeserializeKeyTransform(null);
+                    SetDeserializeKeyTransform(NoOp);
                     expect(instance).toEqual({
                         value0: "strvalue",
                         value1: true,
@@ -925,7 +926,7 @@ describe("Deserializing", function () {
 
                     const target = createTarget(makeTarget, instantiationMethod, Test);
                     const instance = Deserialize(json, Test, target, instantiationMethod);
-                    SetDeserializeKeyTransform(null);
+                    SetDeserializeKeyTransform(NoOp);
                     expect(instance).toEqual({
                         value0: "strvalue",
                         value1: true,
@@ -1070,8 +1071,9 @@ describe("Deserializing", function () {
 			}
 
 			const json = {};
-			const instance = Deserialize(json, Test, null, InstantiationMethod.ObjectCreate);
-			expect(instance.constructed).toBeUndefined();
+            const instance = Deserialize(json, Test, null, InstantiationMethod.ObjectCreate);
+            expect(instance).not.toBeNull();
+			expect(instance!.constructed).toBeUndefined();
 
 		});
 
