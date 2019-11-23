@@ -1,27 +1,45 @@
 {
-  "name": "cerialize",
-  "description": "Easy serialization throught ES7/Typescript annotations",
-  "keywords": [
-    "serialize",
-    "typescript",
-    "es7",
-    "annotations",
-    "decoration",
-    "decorators"
-  ],
-  "author": "Matt Weichselbaum",
-  "license": "MIT",
-  "repository": "https://github.com/weichx/cerialize",
-  "version": "0.1.18",
-  "main": "index.js",
-  "typings": "dist/serialize.d.ts",
-  "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-jasmine": "^2.0.1",
-    "gulp-tsc": "^1.1.0",
-    "jasmine-core": "^2.6.2"
-  },
-  "dependencies": {
-    "typescript": "^2.5.0"
-  }
+	"name": "cerializr",
+	"description": "Easy serialization through ES7/Typescript annotations",
+	"keywords": [
+		"serialize",
+		"typescript",
+		"es7",
+		"annotations",
+		"decoration",
+		"decorators"
+	],
+	"author": "Kevin MATHY",
+	"license": "MIT",
+	"repository": "https://github.com/kmathy/cerializr",
+	"version": "3.0.0",
+	"main": "dist/index.js",
+	"scripts": {
+		"install": "tsc",
+		"build": "tsc -b --clean",
+		"test": "jest",
+		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
+	},
+	"typings": "dist/index.d.ts",
+	"devDependencies": {
+		"@types/jest": "^24.0.23",
+		"jest": "^24.9.0",
+		"ts-jest": "^24.2.0",
+		"typescript": "^3.7.2"
+	},
+	"jest": {
+		"testRegex": "/spec/.*\\.spec\\.([tj]sx?)$",
+		"transform": {
+			"^.+\\.[jt]sx?$": "ts-jest"
+		},
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"jsx"
+		]
+	},
+	"dependencies": {
+		"tslib": "^1.9.0"
+	}
 }

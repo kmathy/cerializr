@@ -1,15 +1,21 @@
 {
-  "compilerOptions": {
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "outDir": "./dist/",
-    "preserveConstEnums": false,
-    "removeComments": false,
-    "target": "es6",
-    "module": "es6",
-    "stripInternal": true,
-    "experimentalDecorators": true,
-    "importHelpers": false,
-    "noImplicitUseStrict": true
-  }
+	"compilerOptions": {
+		"noImplicitReturns": true,
+		"noImplicitAny": true,
+		"outDir": "./dist/",
+		"preserveConstEnums": false,
+		"removeComments": true,
+		"target": "es6",
+		"module": "commonjs",
+		"stripInternal": true,
+		"strictNullChecks": true,
+		"experimentalDecorators": true,
+		"importHelpers": false,
+		"noEmitHelpers": false,
+		"declaration": true,
+		"sourceMap": true,
+		"moduleResolution": "node"
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }
