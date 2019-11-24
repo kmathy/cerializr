@@ -19,7 +19,7 @@
 		"prepublish": "npm run build",
 		"install": "tsc",
 		"build": "tsc",
-		"publish-npm": "np --contents=./dist --no-yarn",
+		"publish-npm": "np --no-yarn",
 		"test": "jest",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
 	},
