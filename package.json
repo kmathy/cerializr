@@ -12,7 +12,7 @@
 	"author": "Kevin MATHY",
 	"license": "MIT",
 	"repository": "https://github.com/kmathy/cerializr",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"main": "dist/index.js",
 	"scripts": {
 		"install": "tsc",
