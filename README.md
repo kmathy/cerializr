@@ -164,6 +164,19 @@ const instance = Deserialize(json, Starship);
     }
 ```
 
+#### Example of use with Angular (HttpClient)
+
+```typescript
+    ships$: Observable<Starship[]>;
+    
+    ...
+    ngOnInit() {
+        this.ships$ = this.http.get<JsonArray>("/assets/ships.json").pipe( // ships.json contains an array of StarShip
+          map(res => DeserializeArray(res, Starship)),
+        );
+    }
+```
+
 ## Annotations
 
 When annotating your classes you can declare which fields get treated as which kinds of values and how they are read and written to and from json format. To specify how fields are written to json, use `@serialize*` annotations. For writing, use `@deserialize*`.
