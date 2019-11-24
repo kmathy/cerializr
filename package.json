@@ -16,9 +16,9 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"prepublish": "npm run install",
+		"prepublish": "npm run build",
 		"install": "tsc",
-		"build": "tsc -b --clean",
+		"build": "tsc",
 		"publish-npm": "np --contents=./dist --no-yarn",
 		"test": "jest",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
