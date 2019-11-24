@@ -4,6 +4,31 @@ Easy serialization through ES7/Typescript annotations
 
 This is a library to make serializing and deserializing complex JS objects a breeze. It works by applying meta data annotations (as described in ES7 proposal and experimental Typescript feature) to fields in a user defined class.
 
+## Table of contents
+
+- [Cerializr](#cerializr)
+  - [Table of contents](#table-of-contents)
+  - [Concepts](#concepts)
+  - [Example](#example)
+  - [Details](#details)
+  - [Annotations](#annotations)
+        - [Serialization](#serialization)
+        - [Deserialization](#deserialization)
+        - [Serialization and Deserialization](#serialization-and-deserialization)
+        - [Types](#types)
+  - [Serializing Data to JSON](#serializing-data-to-json)
+      - [Functions for Serializing](#functions-for-serializing)
+  - [Deserializing From JSON](#deserializing-from-json)
+      - [Deserializing Into Existing Instances](#deserializing-into-existing-instances)
+      - [Deserializing Into Plain Objects](#deserializing-into-plain-objects)
+        - [Functions](#functions)
+  - [onSerialized Callback](#onserialized-callback)
+  - [onDeserialized Callback](#ondeserialized-callback)
+  - [Inheriting Serialization](#inheriting-serialization)
+  - [Defining a custom serializer type](#defining-a-custom-serializer-type)
+  - [Customizing key transforms](#customizing-key-transforms)
+        - [Note](#note)
+
 ## Concepts
 
 This library works by processing annotations on class types. Annotations are provided for reading (deserializing) and writing (serializing) values to and from json.
