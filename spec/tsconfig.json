@@ -1,0 +1,5 @@
+{
+	"extends": "../tsconfig.json",
+
+	"files": ["./deserialize.spec.ts", "./serialize.spec.ts"]
+}

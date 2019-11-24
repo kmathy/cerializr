@@ -1,4 +1,4 @@
-# Cerialize
+# Cerializr
 
 Easy serialization through ES7/Typescript annotations
 
@@ -249,7 +249,7 @@ expect(existingInstance === instance).toBe(true);
 The `instantiationMethod` parameter can be used to change the way in which instances of the input type are created. With `InstantiationMethod.New`, the constructor will be invoked when a new instance needs to be created. With `InstantiationMethod.ObjectCreate`, the object will be created without invoking its constructor, which is useful for systems where constructed objects immediately freeze themselves. With `InstantiationMethod.None`, the `deserializeXXX` functions will return a plain object instead, which can be useful for systems like Redux that expect / require plain objects and not class instances.
 
 ```typescript
-import { Deserialize, Instances } from "cerialize";
+import { Deserialize, Instances } from "cerializr";
 
 class Immutable {
 	public value: string;
@@ -288,6 +288,7 @@ The default InstantiationMethod can be changed with `SetDefaultInstantiationMeth
     ```
 
 -   `DeserializeArray<T>(json : JsonArray, ClassConstructor<T>, target? : Array<T>) : Array<T>`
+
     ```typescript
     const json = [
     	{
@@ -308,7 +309,9 @@ The default InstantiationMethod can be changed with `SetDefaultInstantiationMeth
     /* re-use our existing array, if possible use existing instances in array, otherwise create new ones */
     DeserializeArray(json, Starship, existingArray);
     ```
+
 -   `DeserializeMap<T>(json : JsonObject, ClassConstructor<T>, target? : Indexable<T>) : Indexable<T>`
+
     ```typescript
         const json = {
             ship0: {/* some values from server */},
@@ -327,6 +330,7 @@ The default InstantiationMethod can be changed with `SetDefaultInstantiationMeth
            otherwise create new ones */
         DeserializeMap(json, Starship, existingMap);
     ```
+
 -   `DeserializeJson(json : JsonType, target? : any) : any`
 
     ```typescript
@@ -448,7 +452,7 @@ class CrewMember {
 Serialization behavior is not inherited by subclasses automatically. To inherit a base class's serialization / deserialization behavior, tag the subclass with `@inheritSerialization(ParentClass)`.
 
 ```typescript
-import { inheritSerialization } from "cerialize";
+import { inheritSerialization } from "cerializr";
 
 @inheritSerialization(User)
 class Admin extends User {}
@@ -476,7 +480,7 @@ class CustomThing {
 
 ## Customizing key transforms
 
-Often your server and your client will have different property naming conventions. For instance, Rails / Ruby generally expects objects to have properties that are under_score_cased while most JS authors prefer camelCase. You can tell Cerialize to use a certain key transform automatically when serializing and deserializing by calling `SetSerializeKeyTransform(fn : (str : string) => string)` and `SetDeserializeKeyTransform(fn : (str : string) => string)`. A handful of transform functions are provided in this package or you can define your own function conforming to `(key : string) => string`.
+Often your server and your client will have different property naming conventions. For instance, Rails / Ruby generally expects objects to have properties that are under_score_cased while most JS authors prefer camelCase. You can tell Cerializr to use a certain key transform automatically when serializing and deserializing by calling `SetSerializeKeyTransform(fn : (str : string) => string)` and `SetDeserializeKeyTransform(fn : (str : string) => string)`. A handful of transform functions are provided in this package or you can define your own function conforming to `(key : string) => string`.
 
 -   The provided functions are:
     -   `CamelCase`

@@ -6,7 +6,6 @@ export * from "./serialize";
 export * from "./deserialize";
 export * from "./annotations";
 export * from "./string_transforms";
-export { InstantiationMethod } from "./util";
 
 export function SetSerializeKeyTransform(fn: (str: string) => string): void {
 	if (typeof fn === "function") {

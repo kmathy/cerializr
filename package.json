@@ -28,7 +28,7 @@
 		"typescript": "^3.7.2"
 	},
 	"jest": {
-		"testRegex": "/spec/.*\\.spec\\.([tj]sx?)$",
+		"testRegex": "./spec/.*\\.spec\\.([tj]sx?)$",
 		"transform": {
 			"^.+\\.[jt]sx?$": "ts-jest"
 		},
@@ -37,7 +37,12 @@
 			"tsx",
 			"js",
 			"jsx"
-		]
+		],
+		"globals": {
+			"ts-jest": {
+				"tsConfig": "./spec/tsconfig.json"
+			}
+		}
 	},
 	"dependencies": {
 		"tslib": "^1.9.0"
