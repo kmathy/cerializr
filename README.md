@@ -9,6 +9,7 @@ This is a library to make serializing and deserializing complex JS objects a bre
 - [Concepts](#concepts)
 - [Example](#example)
 - [Details](#details)
+    - [Example with Angular](#example-of-use-with-angular-httpclient) 
 - [Annotations](#annotations)
     - [Serialization](#serialization)
     - [Deserialization](#deserialization)
