@@ -17,6 +17,7 @@
 	"scripts": {
 		"install": "tsc",
 		"build": "tsc -b --clean",
+		"publish-npm": "np --contents=dist --no-yarn",
 		"test": "jest",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
 	},
