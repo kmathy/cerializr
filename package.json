@@ -1,6 +1,6 @@
 {
 	"name": "cerializr",
-	"description": "Easy serialization through ES7/Typescript annotations",
+	"description": "(de)serialization made easy with ES7/Typescript annotations (decorators)",
 	"keywords": [
 		"serialize",
 		"typescript",
