@@ -1,5 +1,6 @@
 {
 	"name": "cerializr",
+	"sideEffects": false,
 	"description": "(de)serialization made easy with ES7/Typescript annotations (decorators)",
 	"keywords": [
 		"serialize",
@@ -18,7 +19,8 @@
 	"scripts": {
 		"prepublish": "npm run build",
 		"install": "tsc",
-		"build": "tsc",
+		"build": "webpack",
+		"build:prod": "webpack --production",
 		"publish-npm": "np --no-yarn",
 		"test": "jest",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
@@ -26,9 +28,14 @@
 	"typings": "dist/index.d.ts",
 	"devDependencies": {
 		"@types/jest": "^24.0.23",
+		"@types/lodash": "^4.14.149",
+		"clean-webpack-plugin": "^3.0.0",
 		"jest": "^24.9.0",
 		"ts-jest": "^24.2.0",
-		"typescript": "^3.7.2"
+		"ts-loader": "^6.2.1",
+		"typescript": "^3.7.2",
+		"webpack": "^4.41.2",
+		"webpack-cli": "^3.3.10"
 	},
 	"jest": {
 		"testRegex": "./spec/.*\\.spec\\.([tj]sx?)$",
@@ -48,6 +55,7 @@
 		}
 	},
 	"dependencies": {
+		"lodash": "^4.17.15",
 		"tslib": "^1.9.0"
 	}
 }
