@@ -17,8 +17,7 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"prepublish": "npm run build",
-		"install": "tsc",
+		"prepublishOnly": "npm run build",
 		"build": "tsc && webpack",
 		"publish-npm": "np --no-yarn",
 		"test": "jest",
