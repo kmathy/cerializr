@@ -1,4 +1,5 @@
-import {
+import { 
+  NoOp, 
   autoserializeAs,
   autoserializeAsArray,
   autoserializeAsJson,
@@ -8,11 +9,12 @@ import {
   serializeAsArray,
   serializeAsJson,
   serializeAsMap,
-  serializeUsing
-} from "../src/annotations";
-import { Serialize, SerializeJSON } from "../src/serialize";
-import { Indexable, JsonObject } from "../src/util";
-import { SetSerializeKeyTransform, NoOp } from "../src/index";
+  serializeUsing, 
+  Serialize, 
+  Indexable, 
+  JsonObject, 
+  SetSerializeKeyTransform 
+} from "../src/index";
 
 describe("Serializing", function () {
 

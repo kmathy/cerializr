@@ -4,7 +4,7 @@
 		"noImplicitAny": true,
 		"outDir": "./dist/",
 		"preserveConstEnums": false,
-		"removeComments": true,
+		"removeComments": false,
 		"target": "es6",
 		"module": "commonjs",
 		"stripInternal": true,
@@ -13,6 +13,7 @@
 		"importHelpers": false,
 		"noEmitHelpers": false,
 		"declaration": true,
+		"emitDeclarationOnly": true,
 		"sourceMap": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true

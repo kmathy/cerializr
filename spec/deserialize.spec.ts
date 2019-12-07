@@ -9,11 +9,14 @@ import {
     deserializeAsArray,
     deserializeAsJson,
     deserializeAsMap,
-    deserializeUsing, SetDeserializeKeyTransform,
-    SetDefaultInstantiationMethod,
-    NoOp
-}                                                   from "../src";
-import {InstantiationMethod, Indexable, JsonObject} from "../src/util";
+    deserializeUsing,
+    NoOp,
+    InstantiationMethod, 
+    Indexable, 
+    JsonObject,
+    SetDeserializeKeyTransform, 
+    SetDefaultInstantiationMethod
+} from '../src';
 
 function expectInstance(instance : any, type : any, instantiationMethod : InstantiationMethod) {
     switch (instantiationMethod) {

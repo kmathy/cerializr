@@ -1,14 +1,13 @@
 import {
-	getTarget,
 	Indexable,
-	isPrimitiveType,
 	JsonArray,
 	JsonObject,
 	JsonType,
 	SerializablePrimitiveType,
 	SerializableType,
 	InstantiationMethod,
-} from "./util";
+} from "./interfaces";
+import { getTarget, isPrimitiveType } from "./util";
 import { MetaData, MetaDataFlag } from "./meta_data";
 
 function _DeserializeMap<T>(

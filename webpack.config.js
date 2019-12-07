@@ -1,10 +1,10 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+const CircularDependencyPlugin = require("circular-dependency-plugin");
 
 module.exports = {
 	entry: "./src/index.ts",
-	plugins: [new CleanWebpackPlugin()],
 	module: {
 		rules: [
 			{
@@ -24,13 +24,21 @@ module.exports = {
 	optimization: {
 		usedExports: true,
 	},
-	plugins: [new LodashModuleReplacementPlugin()],
+	plugins: [
+		new CircularDependencyPlugin({
+			include: /src/,
+		}),
+		new CleanWebpackPlugin({
+			cleanOnceBeforeBuildPatterns: ["**/*", "!*.d.ts"],
+		}),
+		new LodashModuleReplacementPlugin(),
+	],
 	mode: "production",
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"],
 	},
 	output: {
-		filename: "bundle.js",
+		filename: "index.js",
 		path: path.resolve(__dirname, "dist"),
 	},
 };

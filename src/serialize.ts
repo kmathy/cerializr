@@ -1,11 +1,11 @@
 import {
 	Indexable,
-	isPrimitiveType,
 	JsonObject,
 	JsonType,
 	SerializablePrimitiveType,
 	SerializableType,
-} from "./util";
+} from "./interfaces";
+import { isPrimitiveType } from "./util";
 import { MetaData, MetaDataFlag } from "./meta_data";
 import {
 	isNil,
@@ -17,6 +17,14 @@ import {
 	isDate,
 } from "lodash";
 
+/**
+ * takes an indexable object ie `<T>{ [idx: string] : T }` and for each key serializes
+     the object using the provided class type.
+ * @param source - an indexable object
+ * @param type - Type to serialize
+ * 
+ * @return Indexable object of JsonType
+ */
 export function SerializeMap<T extends Indexable>(
 	source: T,
 	type: SerializableType<T>
@@ -37,6 +45,14 @@ export function SerializeMap<T extends Indexable>(
 	return target;
 }
 
+/**
+ * takes an array of objects and serializes each entry using the provided class type
+ *
+ * @param source - An array of objects
+ * @param type - Type to serialize each entry of the array
+ *
+ * @return Array of JsonType
+ */
 export function SerializeArray<T>(
 	source: Array<T>,
 	type: SerializableType<T>
@@ -67,6 +83,14 @@ export function SerializePrimitive<T>(
 	}
 }
 
+/**
+ * takes any value and serializes it as json, no structure is assumed 
+    and any serialization annotations on any processed objects are totally ignored.
+ * @param source 
+ * @param transformKeys 
+ * 
+ * @return JsonType
+ */
 export function SerializeJSON(source: any, transformKeys = true): JsonType {
 	if (isNil(source)) return null;
 
@@ -101,6 +125,13 @@ export function SerializeJSON(source: any, transformKeys = true): JsonType {
 	return source;
 }
 
+/**
+ * takes a single object and serializes it using the provided class type.
+ * @param instance - A single object to serialize
+ * @param type - Type to serialize the instance
+ *
+ * @return A JsonObject or null
+ */
 export function Serialize<T>(
 	instance: T,
 	type: SerializableType<T>
