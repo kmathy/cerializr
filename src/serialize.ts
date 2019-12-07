@@ -1,152 +1,172 @@
-import {Indexable, isPrimitiveType, JsonObject, JsonType, SerializablePrimitiveType, SerializableType} from "./util";
-import {MetaData, MetaDataFlag} from "./meta_data";
+import {
+	Indexable,
+	isPrimitiveType,
+	JsonObject,
+	JsonType,
+	SerializablePrimitiveType,
+	SerializableType,
+} from "./util";
+import { MetaData, MetaDataFlag } from "./meta_data";
+import {
+	isNil,
+	isNull,
+	isUndefined,
+	isObjectLike,
+	isFunction,
+	isRegExp,
+	isDate,
+} from "lodash";
 
-export function SerializeMap<T>(source : T, type : SerializableType<T>) : Indexable<JsonType> {
-    const target : Indexable<JsonType> = {};
-    const keys = Object.keys(source);
+export function SerializeMap<T extends Indexable>(
+	source: T,
+	type: SerializableType<T>
+): Indexable<JsonType> {
+	const target: Indexable<JsonType> = {};
+	const keys = Object.keys(source);
 
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        const value = (source as any)[key];
-        if(value !== void 0) {
-          target[MetaData.serializeKeyTransform(key)] = Serialize(value, type);
-        }
-    }
+	keys.forEach(key => {
+		const value = source[key];
+		if (!isUndefined(value)) {
+			target[MetaData.serializeKeyTransform(key)] = Serialize(
+				value,
+				type
+			);
+		}
+	});
 
-    return target;
+	return target;
 }
 
-export function SerializeArray<T>(source : Array<T>, type : SerializableType<T>) : Array<JsonType> {
-    const retn = new Array<JsonType>(source.length);
-    for (let i = 0; i < source.length; i++) {
-        retn[i] = Serialize(source[i], type);
-    }
-    return retn;
+export function SerializeArray<T>(
+	source: Array<T>,
+	type: SerializableType<T>
+): Array<JsonType> {
+	return source.map<JsonType>(val => Serialize(val, type));
 }
 
-export function SerializePrimitive<T>(source : SerializablePrimitiveType, type : SerializablePrimitiveType) : JsonType {
+export function SerializePrimitive<T>(
+	source: SerializablePrimitiveType,
+	type: SerializablePrimitiveType
+): JsonType {
+	if (isNil(source)) {
+		return null;
+	}
 
-    if (source === null || source === void 0) {
-        return null;
-    }
-
-    if (type === String) return source.toString();
-
-    if (type === Boolean) return Boolean(source);
-
-    if (type === Number) {
-        const value = Number(source);
-        if (isNaN(value)) return null;
-        return value;
-    }
-
-    if (type === Date) return source.toString();
-
-    if (type === RegExp) return source.toString();
-
-    return source.toString();
-
+	switch (type) {
+		case Boolean:
+			return Boolean(source);
+		case Number:
+			const value = Number(source);
+			if (isNaN(value)) return null;
+			return value;
+		case String:
+		case Date:
+		case RegExp:
+		default:
+			return source.toString();
+	}
 }
 
-export function SerializeJSON(source : any, transformKeys = true) : JsonType {
-    if (source === null || source === void 0) return null;
+export function SerializeJSON(source: any, transformKeys = true): JsonType {
+	if (isNil(source)) return null;
 
-    if (Array.isArray(source)) {
-        const array = new Array<any>(source.length);
-        for (let i = 0; i < source.length; i++) {
-            array[i] = SerializeJSON(source[i], transformKeys);
-        }
-        return array;
-    }
+	if (Array.isArray(source)) {
+		return source.map(val => SerializeJSON(val, transformKeys));
+	}
 
-    const type = typeof source;
+	if (isObjectLike(source)) {
+		if (isDate(source) || isRegExp(source)) {
+			return source.toString();
+		} else {
+			const sourceIndexed: Indexable<JsonType> = {};
+			const keys = Object.keys(source);
+			keys.forEach(key => {
+				const value = source[key];
+				if (!isUndefined(value)) {
+					const sourceIndexedKey = transformKeys
+						? MetaData.serializeKeyTransform(key)
+						: key;
+					sourceIndexed[sourceIndexedKey] = SerializeJSON(
+						value,
+						transformKeys
+					);
+				}
+			});
+			return sourceIndexed;
+		}
+	} else if (isFunction(source)) {
+		return null;
+	}
 
-    if (type === "object") {
-
-        if (source instanceof Date || source instanceof RegExp) {
-            return source.toString();
-        }
-        else {
-            const retn : Indexable<JsonType> = {};
-            const keys = Object.keys(source);
-            for (let i = 0; i < keys.length; i++) {
-                const key = keys[i];
-                const value = source[key];
-                if(value !== void 0) {
-                  const retnKey = transformKeys ? MetaData.serializeKeyTransform(key) : key;
-                  retn[retnKey] = SerializeJSON(value, transformKeys);
-                }
-            }
-            return retn;
-        }
-
-    }
-    else if (type === "function") {
-        return null;
-    }
-
-    return source;
+	return source;
 }
 
-export function Serialize<T>(instance : T, type : SerializableType<T>) : JsonObject | null {
+export function Serialize<T>(
+	instance: T,
+	type: SerializableType<T>
+): JsonObject | null {
+	if (isNil(instance)) {
+		return null;
+	}
 
-    if (instance === void 0 || instance === null) {
-        return null;
-    }
+	const metadataList = MetaData.getMetaDataForType(type);
 
-    const metadataList = MetaData.getMetaDataForType(type);
+	// todo -- maybe move this to a Generic deserialize
+	if (isNull(metadataList)) {
+		return isPrimitiveType(type)
+			? (SerializePrimitive(
+					(instance as unknown) as SerializablePrimitiveType,
+					type as any
+			  ) as JsonObject)
+			: {};
+	}
 
-    // todo -- maybe move this to a Generic deserialize
-    if (metadataList === null) {
-        if (isPrimitiveType(type)) {
-            return SerializePrimitive(instance as any, type as any) as any;
-        }
-        else {
-            return {};
-        }
-    }
+	const target: Indexable<JsonType> = {};
 
-    const target : Indexable<JsonType> = {};
+	metadataList.forEach(metadata => {
+		if (isNull(metadata.serializedKey)) return;
 
-    for (let i = 0; i < metadataList.length; i++) {
-        const metadata = metadataList[i];
+		const source = (instance as any)[metadata.keyName];
 
-        if (metadata.serializedKey === null) continue;
+		if (isUndefined(source)) return;
 
-        const source = (instance as any)[metadata.keyName];
+		const keyName = metadata.getSerializedKey();
 
-        if (source === void 0) continue;
+		target[keyName] = serializeByFlag(source, metadata);
+	});
 
-        const keyName = metadata.getSerializedKey();
-        const flags = metadata.flags;
+	if (isFunction(type.onSerialized)) {
+		const value = type.onSerialized(target, instance);
+		if (!isUndefined(value)) {
+			return value as JsonObject;
+		}
+	}
 
-        if ((flags & MetaDataFlag.SerializeMap) !== 0) {
-            target[keyName] = SerializeMap(source, metadata.serializedType);
-        }
-        else if ((flags & MetaDataFlag.SerializeArray) !== 0) {
-            target[keyName] = SerializeArray(source, metadata.serializedType);
-        }
-        else if ((flags & MetaDataFlag.SerializePrimitive) !== 0) {
-            target[keyName] = SerializePrimitive(source, metadata.serializedType as SerializablePrimitiveType);
-        }
-        else if ((flags & MetaDataFlag.SerializeObject) !== 0) {
-            target[keyName] = Serialize(source, metadata.serializedType);
-        }
-        else if ((flags & MetaDataFlag.SerializeJSON) !== 0) {
-            target[keyName] = SerializeJSON(source, (flags & MetaDataFlag.SerializeJSONTransformKeys) !== 0);
-        }
-        else if ((flags & MetaDataFlag.SerializeUsing) !== 0) {
-            target[keyName] = (metadata.serializedType as any)(source);
-        }
+	return target;
+}
 
-    }
-
-    if (typeof type.onSerialized === "function") {
-        const value = type.onSerialized(target, instance);
-        if (value !== void 0) {
-            return value as JsonObject;
-        }
-    }
-
-    return target;
+function serializeByFlag(source: any, metadata: MetaData): JsonType {
+	const flags = metadata.flags;
+	switch (true) {
+		case !!(flags & MetaDataFlag.SerializeMap):
+			return SerializeMap(source, metadata.serializedType);
+		case !!(flags & MetaDataFlag.SerializeArray):
+			return SerializeArray(source, metadata.serializedType);
+		case !!(flags & MetaDataFlag.SerializePrimitive):
+			return SerializePrimitive(
+				source,
+				metadata.serializedType as SerializablePrimitiveType
+			);
+		case !!(flags & MetaDataFlag.SerializeObject):
+			return Serialize(source, metadata.serializedType);
+		case !!(flags & MetaDataFlag.SerializeJSON):
+			return SerializeJSON(
+				source,
+				!!(flags & MetaDataFlag.SerializeJSONTransformKeys)
+			);
+		case !!(flags & MetaDataFlag.SerializeUsing):
+			return (metadata.serializedType as any)(source);
+		default:
+			return null;
+	}
 }

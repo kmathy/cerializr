@@ -14,7 +14,8 @@
 		"noEmitHelpers": false,
 		"declaration": true,
 		"sourceMap": true,
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"esModuleInterop": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist"]

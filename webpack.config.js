@@ -1,5 +1,6 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 
 module.exports = {
 	entry: "./src/index.ts",
@@ -8,14 +9,22 @@ module.exports = {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: "ts-loader",
+				loader: "babel-loader",
 				exclude: /node_modules/,
+				options: {
+					plugins: [
+						"lodash",
+						"@babel/plugin-proposal-class-properties",
+					],
+					presets: ["@babel/preset-typescript", "@babel/preset-env"],
+				},
 			},
 		],
 	},
 	optimization: {
 		usedExports: true,
 	},
+	plugins: [new LodashModuleReplacementPlugin()],
 	mode: "production",
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"],
