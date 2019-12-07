@@ -1,46 +1,53 @@
 import { camelCase, snakeCase, kebabCase } from "lodash";
 
+/**
+ * Does nothing to the string
+ * @param str
+ *
+ * @return str unchanged
+ */
 export function NoOp(str: string): string {
 	return str;
 }
 
-//regexes
-const STRING_CAMELIZE_REGEXP = /(-|_|\.|\s)+(.)?/g;
-const STRING_DECAMELIZE_REGEXP = /([a-z\d])([A-Z])/g;
-const STRING_UNDERSCORE_REGEXP_1 = /([a-z\d])([A-Z]+)/g;
-const STRING_UNDERSCORE_REGEXP_2 = /-|\s+/g;
-const STRING_DASHERIZE_REGEXP = /([a-z\d])([A-Z])/g;
-
-//convert strings like my_camel_string to myCamelString
+/**
+ * convert strings like my_camel_string to myCamelString
+ *
+ * @param str
+ *
+ * @return myCamelString
+ */
 export function CamelCase(str: string): string {
-	return str
-		.replace(STRING_CAMELIZE_REGEXP, function(
-			match,
-			separator,
-			chr
-		): string {
-			return chr ? chr.toUpperCase() : "";
-		})
-		.replace(/^([A-Z])/, function(match, separator, chr): string {
-			return match.toLowerCase();
-		});
+	return camelCase(str);
 }
 
-//convert strings like MyCamelString to my_camel_string
+/**
+ * convert strings like MyCamelString to my_camel_string
+ *
+ * @param str
+ *
+ * @return my_snake_string
+ */
 export function SnakeCase(str: string): string {
-	return str.replace(STRING_DECAMELIZE_REGEXP, "$1_$2").toLowerCase();
+	return snakeCase(str);
 }
 
-//convert strings like myCamelCase to my_camel_case
+/**
+ * convert strings like myCamelCase to my_camel_case
+ * @param str
+ *
+ * @return my_underscore_case
+ */
 export function UnderscoreCase(str: string): string {
-	return str
-		.replace(STRING_UNDERSCORE_REGEXP_1, "$1_$2")
-		.replace(STRING_UNDERSCORE_REGEXP_2, "_")
-		.toLowerCase();
+	return snakeCase(str);
 }
 
-//convert strings like my_camelCase to my-camel-case
+/**
+ * convert strings like my_camelCase to my-camel-case
+ * @param str
+ *
+ * @return my-dash-case (or kebab-case)
+ */
 export function DashCase(str: string): string {
-	str = str.replace(/_/g, "-");
-	return str.replace(STRING_DASHERIZE_REGEXP, "$1-$2").toLowerCase();
+	return kebabCase(str);
 }
