@@ -21,8 +21,6 @@ export enum MetaDataFlag {
 	SerializeMap = 1 << 6,
 	DeserializeJSON = 1 << 7,
 	SerializeJSON = 1 << 8,
-	DeserializeJSONTransformKeys = 1 << 9,
-	SerializeJSONTransformKeys = 1 << 10,
 	DeserializeUsing = 1 << 11,
 	SerializeUsing = 1 << 12,
 	DeserializeObject = 1 << 13,
@@ -30,8 +28,6 @@ export enum MetaDataFlag {
 
 	AutoPrimitive = SerializePrimitive | DeserializePrimitive,
 	AutoUsing = SerializeUsing | DeserializeUsing,
-	AutoJSONTransformKeys = DeserializeJSONTransformKeys |
-		SerializeJSONTransformKeys,
 }
 
 /** @internal */
