@@ -20,15 +20,23 @@ export type SerializablePrimitiveType =
 	| RegExpConstructor
 	| StringConstructor;
 
+/**
+ * #### InstantiationMethod.New:
+ * The constructor will be invoked when a new instance needs to be created.
+ *
+ * #### InstantiationMethod.ObjectCreate:
+ * The object will be created without invoking its constructor, which is useful for systems where constructed objects immediately freeze themselves
+ *
+ * #### InstantiationMethode.None:
+ * *deserializeXXX* functions will return a plain object instead, which can be useful for systems like Redux that expect / require plain objects and not class instances.
+ */
 export enum InstantiationMethod {
 	None = 0,
 	New = 1,
 	ObjectCreate = 2,
 }
 
-export interface JsonObject {
-	[idx: string]: JsonType | JsonObject;
-}
+export interface JsonObject extends Indexable<JsonType | JsonObject> {}
 
 export interface JsonArray extends Array<JsonType> {}
 
@@ -50,4 +58,9 @@ export interface SerializableType<T> {
 		instance: T,
 		instantiationMethod?: InstantiationMethod
 	) => T | void;
+}
+
+export interface CerializrAsJsonOptions {
+	keyName: string;
+	transformKey: boolean;
 }

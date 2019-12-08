@@ -17,6 +17,7 @@ import {
     SetDeserializeKeyTransform, 
     SetDefaultInstantiationMethod
 } from '../src';
+import { MetaData } from '../src/meta_data';
 
 function expectInstance(instance : any, type : any, instantiationMethod : InstantiationMethod) {
     switch (instantiationMethod) {
@@ -679,7 +680,7 @@ describe("Deserializing", function () {
 
     describe("DeserializeJSON", function () {
 
-        function runTests(blockName : string, instantiationMethod : InstantiationMethod, deserializeAs : any, deserializeAsJson : any, makeTarget : boolean) {
+        function runTests(blockName : string, instantiationMethod : InstantiationMethod, deserializeAsJson: any, makeTarget : boolean) {
 
             describe(blockName, function () {
 
@@ -867,7 +868,7 @@ describe("Deserializing", function () {
 
                 it("deserializes json with a different key", function () {
                     class Test {
-                        @deserializeAsJson("something") things : any;
+                        @deserializeAsJson({ keyName: "something" }) things : any;
 
                     }
 
@@ -916,9 +917,9 @@ describe("Deserializing", function () {
                     });
 
                     class Test {
-                        @deserializeAsJson(true) value0 : string;
-                        @deserializeAsJson(true) value1 : boolean;
-                        @deserializeAsJson(true) value2 : number;
+                        @deserializeAsJson({ transformKey: true }) value0 : string;
+                        @deserializeAsJson({ transformKey: true }) value1 : boolean;
+                        @deserializeAsJson({ transformKey: true }) value2 : number;
                     }
 
                     const json = {
@@ -937,21 +938,44 @@ describe("Deserializing", function () {
                     });
                 });
 
-                xit("does not apply key transforms when set to false", function () {
+                it("does not apply key transforms when set to false", function () {
+                    SetDeserializeKeyTransform(function (value) {
+                        return value.toUpperCase();
+                    });
 
+                    class Test {
+                        @deserializeAsJson({ transformKey: false }) value0 : string;
+                        @deserializeAsJson({ transformKey: false }) value1 : boolean;
+                        @deserializeAsJson({ transformKey: false }) value2 : number;
+                    }
+
+                    const json = {
+                        value0: "strvalue",
+                        value1: true,
+                        value2: 100
+                    };
+
+                    const target = createTarget(makeTarget, instantiationMethod, Test);
+                    const instance = Deserialize(json, Test, target, instantiationMethod);
+                    SetDeserializeKeyTransform(NoOp);
+                    expect(instance).toEqual({
+                        value0: "strvalue",
+                        value1: true,
+                        value2: 100
+                    });
                 });
 
             });
         }
 
-        runTests("Normal > Create Instances > With Target", InstantiationMethod.New, deserializeAs, deserializeAsJson, true);
-        runTests("Normal > Create Instances > Without Target", InstantiationMethod.New, deserializeAs, deserializeAsJson, false);
-        runTests("Normal > No Instances > With Target", InstantiationMethod.None, deserializeAs, deserializeAsJson, true);
-        runTests("Normal > No Instances > Without Target", InstantiationMethod.None, deserializeAs, deserializeAsJson, false);
-        runTests("Auto > Create Instances > With Target", InstantiationMethod.New, autoserializeAs, autoserializeAsJson, true);
-        runTests("Auto > Create Instances > Without Target", InstantiationMethod.New, autoserializeAs, autoserializeAsJson, false);
-        runTests("Auto > No Instances > With Target", InstantiationMethod.None, autoserializeAs, autoserializeAsJson, true);
-        runTests("Auto > No Instances > Without Target", InstantiationMethod.None, autoserializeAs, autoserializeAsJson, false);
+        runTests("Normal > Create Instances > With Target", InstantiationMethod.New, deserializeAsJson, true);
+        runTests("Normal > Create Instances > Without Target", InstantiationMethod.New, deserializeAsJson, false);
+        runTests("Normal > No Instances > With Target", InstantiationMethod.None, deserializeAsJson, true);
+        runTests("Normal > No Instances > Without Target", InstantiationMethod.None, deserializeAsJson, false);
+        runTests("Auto > Create Instances > With Target", InstantiationMethod.New, autoserializeAsJson, true);
+        runTests("Auto > Create Instances > Without Target", InstantiationMethod.New, autoserializeAsJson, false);
+        runTests("Auto > No Instances > With Target", InstantiationMethod.None, autoserializeAsJson, true);
+        runTests("Auto > No Instances > Without Target", InstantiationMethod.None, autoserializeAsJson, false);
 
     });
 

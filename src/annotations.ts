@@ -5,6 +5,7 @@ import {
 	SerializableType,
 	SerializeFn,
 	ISerializer,
+	CerializrAsJsonOptions,
 } from "./interfaces";
 
 export function serializeUsing(serializer: SerializeFn, keyName?: string) {
@@ -74,28 +75,18 @@ export function serializeAsMap<T>(type: SerializableType<T>, keyName?: string) {
 }
 
 export function serializeAsJson(
-	keyNameOrTransformKeys?: boolean | string,
-	transformKeys = true
+	{ keyName, transformKey }: Partial<CerializrAsJsonOptions> = {
+		transformKey: true,
+	}
 ) {
 	return function(target: IConstructable, actualKeyName: string): void {
 		const metadata = MetaData.getMetaData(
 			target.constructor,
 			actualKeyName
 		);
-		metadata.serializedKey =
-			typeof keyNameOrTransformKeys === "string"
-				? keyNameOrTransformKeys
-				: actualKeyName;
+		metadata.serializedKey = keyName || actualKeyName;
 		metadata.flags |= MetaDataFlag.SerializeJSON;
-		const shouldTransformKeys =
-			typeof keyNameOrTransformKeys === "boolean"
-				? keyNameOrTransformKeys
-				: transformKeys;
-		metadata.flags = setBitConditionally(
-			metadata.flags,
-			MetaDataFlag.SerializeJSONTransformKeys,
-			shouldTransformKeys
-		);
+		metadata.transformKey = transformKey!;
 	};
 }
 
@@ -169,28 +160,18 @@ export function deserializeAsMap(
 }
 
 export function deserializeAsJson(
-	keyNameOrTransformKeys?: boolean | string,
-	transformKeys = true
+	{ keyName, transformKey }: Partial<CerializrAsJsonOptions> = {
+		transformKey: true,
+	}
 ) {
 	return function(target: IConstructable, actualKeyName: string): void {
 		const metadata = MetaData.getMetaData(
 			target.constructor,
 			actualKeyName
 		);
-		metadata.deserializedKey =
-			typeof keyNameOrTransformKeys === "string"
-				? keyNameOrTransformKeys
-				: actualKeyName;
+		metadata.deserializedKey = keyName || actualKeyName;
 		metadata.flags |= MetaDataFlag.DeserializeJSON;
-		const shouldTransformKeys =
-			typeof keyNameOrTransformKeys === "boolean"
-				? keyNameOrTransformKeys
-				: transformKeys;
-		metadata.flags = setBitConditionally(
-			metadata.flags,
-			MetaDataFlag.DeserializeJSONTransformKeys,
-			shouldTransformKeys
-		);
+		metadata.transformKey = transformKey!;
 	};
 }
 
@@ -282,31 +263,21 @@ export function autoserializeAsMap(
 }
 
 export function autoserializeAsJson(
-	keyNameOrTransformKeys?: boolean | string,
-	transformKeys = true
+	{ keyName, transformKey }: Partial<CerializrAsJsonOptions> = {
+		transformKey: true,
+	}
 ) {
 	return function(target: IConstructable, actualKeyName: string): void {
 		const metadata = MetaData.getMetaData(
 			target.constructor,
 			actualKeyName
 		);
-		const key =
-			typeof keyNameOrTransformKeys === "string"
-				? keyNameOrTransformKeys
-				: actualKeyName;
-		const shouldTransformKeys =
-			typeof keyNameOrTransformKeys === "boolean"
-				? keyNameOrTransformKeys
-				: transformKeys;
+		const key = keyName || actualKeyName;
 		metadata.deserializedKey = key;
 		metadata.serializedKey = key;
 		metadata.flags |=
 			MetaDataFlag.SerializeJSON | MetaDataFlag.DeserializeJSON;
-		metadata.flags = setBitConditionally(
-			metadata.flags,
-			MetaDataFlag.AutoJSONTransformKeys,
-			shouldTransformKeys
-		);
+		metadata.transformKey = transformKey!;
 	};
 }
 

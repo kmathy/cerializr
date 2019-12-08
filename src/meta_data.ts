@@ -37,6 +37,7 @@ export enum MetaDataFlag {
 /** @internal */
 export class MetaData {
 	public keyName: string; //the key name of the property this meta data describes
+	public transformKey = true;
 	public serializedKey: string; //the target keyname for serializing
 	public deserializedKey: string; //the target keyname for deserializing
 	public serializedType: SerializableType<any>; //the type to use when serializing this property
@@ -86,6 +87,7 @@ export class MetaData {
 		metadata.serializedKey = data.serializedKey;
 		metadata.serializedType = data.serializedType;
 		metadata.deserializedType = data.deserializedType;
+		metadata.transformKey = data.transformKey;
 		metadata.flags = data.flags;
 		return metadata;
 	}

@@ -117,9 +117,7 @@ export function DeserializeJSON<T extends JsonType>(
 	}
 
 	if (isObject(data)) {
-		const retn = (target && typeof target === "object"
-			? target
-			: {}) as Indexable<JsonType>;
+		const retn = (isObject(target) ? target : {}) as Indexable<JsonType>;
 
 		const keys = Object.keys(data);
 
@@ -190,11 +188,16 @@ function _Deserialize<T extends Indexable>(
 
 		if (metadata.deserializedKey === null) continue;
 
-		const source: any = data[metadata.getDeserializedKey()];
+		const source: any =
+			data[
+				metadata.transformKey
+					? metadata.getDeserializedKey()
+					: metadata.deserializedKey
+			];
 
 		if (isUndefined(source)) continue;
 
-		const keyName = metadata.keyName;
+		let keyName = metadata.keyName;
 		const flags = metadata.flags;
 		if (target) {
 			if ((flags & MetaDataFlag.DeserializeMap) !== 0) {
@@ -227,7 +230,7 @@ function _Deserialize<T extends Indexable>(
 			} else if ((flags & MetaDataFlag.DeserializeJSON) !== 0) {
 				(target as Indexable)[keyName] = DeserializeJSON(
 					source,
-					(flags & MetaDataFlag.DeserializeJSONTransformKeys) !== 0,
+					metadata.transformKey,
 					instantiationMethod
 				);
 			} else if ((flags & MetaDataFlag.DeserializeUsing) !== 0) {

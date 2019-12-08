@@ -690,7 +690,7 @@ describe("Serializing", function () {
 
         it("serializes json with a different key", function () {
           class Test {
-            @serializeAsJson("different") value0 : string;
+            @serializeAsJson({ keyName: "different" }) value0 : string;
           }
 
           var s = new Test();
@@ -750,9 +750,9 @@ describe("Serializing", function () {
           });
 
           class Test {
-            @serializeAsJson(true) value0 : string;
-            @serializeAsJson(true) value1 : boolean;
-            @serializeAsJson(true) value2 : number;
+            @serializeAsJson({transformKeys: true}) value0 : string;
+            @serializeAsJson({transformKeys: true}) value1 : boolean;
+            @serializeAsJson({transformKeys: true}) value2 : number;
           }
 
           var s = new Test();
@@ -774,9 +774,9 @@ describe("Serializing", function () {
           });
 
           class Test {
-            @serializeAsJson(false) value0 = { v0: "yes", v1: "no" };
-            @serializeAsJson(false) value1 : boolean = true;
-            @serializeAsJson(true) value2 : number = 100;
+            @serializeAsJson({ transformKeys: false }) value0 = { v0: "yes", v1: "no" };
+            @serializeAsJson({ transformKeys: false }) value1 : boolean = true;
+            @serializeAsJson({ transformKeys: true }) value2 : number = 100;
           }
 
           var s = new Test();
