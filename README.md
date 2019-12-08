@@ -6,27 +6,27 @@ This is a library to make serializing and deserializing complex JS objects a bre
 
 ## Table of contents
 
-- [Concepts](#concepts)
-- [Example](#example)
-- [Details](#details)
-    - [Example with Angular](#example-of-use-with-angular-httpclient) 
-- [Annotations](#annotations)
-    - [Serialization](#serialization)
-    - [Deserialization](#deserialization)
-    - [Serialization and Deserialization](#serialization-and-deserialization)
-    - [Types](#types)
-- [Serializing Data to JSON](#serializing-data-to-json)
-    - [Functions for Serializing](#functions-for-serializing)
-- [Deserializing From JSON](#deserializing-from-json)
-    - [Deserializing Into Existing Instances](#deserializing-into-existing-instances)
-    - [Deserializing Into Plain Objects](#deserializing-into-plain-objects)
-    - [Functions](#functions)
-- [onSerialized Callback](#onserialized-callback)
-- [onDeserialized Callback](#ondeserialized-callback)
-- [Inheriting Serialization](#inheriting-serialization)
-- [Defining a custom serializer type](#defining-a-custom-serializer-type)
-- [Customizing key transforms](#customizing-key-transforms)
-    - [Note](#note)
+-   [Concepts](#concepts)
+-   [Example](#example)
+-   [Details](#details)
+    -   [Example with Angular](#example-of-use-with-angular-httpclient)
+-   [Annotations](#annotations)
+    -   [Serialization](#serialization)
+    -   [Deserialization](#deserialization)
+    -   [Serialization and Deserialization](#serialization-and-deserialization)
+    -   [Types](#types)
+-   [Serializing Data to JSON](#serializing-data-to-json)
+    -   [Functions for Serializing](#functions-for-serializing)
+-   [Deserializing From JSON](#deserializing-from-json)
+    -   [Deserializing Into Existing Instances](#deserializing-into-existing-instances)
+    -   [Deserializing Into Plain Objects](#deserializing-into-plain-objects)
+    -   [Functions](#functions)
+-   [onSerialized Callback](#onserialized-callback)
+-   [onDeserialized Callback](#ondeserialized-callback)
+-   [Inheriting Serialization](#inheriting-serialization)
+-   [Defining a custom serializer type](#defining-a-custom-serializer-type)
+-   [Customizing key transforms](#customizing-key-transforms)
+    -   [Note](#note)
 
 ## Concepts
 
@@ -169,7 +169,7 @@ const instance = Deserialize(json, Starship);
 
 ```typescript
     ships$: Observable<Starship[]>;
-    
+
     ...
     ngOnInit() {
         this.ships$ = this.http.get<JsonArray>("/assets/ships.json").pipe( // ships.json contains an array of StarShip
@@ -186,13 +186,15 @@ Most annotations take a class constructor. For primitives, use `String`, `Number
 
 If you want the same behavior for a property when serializing and deserializing, you can either tag that property with a `@serialize*` and `@deserialize*` or you can use `@autoserializeXXX` which will do this in a single annotation and behave exactly the same as `@serialize*` and `@deserialize*`. The only difference in behavior is that `@autoserializingUsing()` takes an argument of type `SerializeAndDeserializeFns` instead of a single function argument like it's siblings do.
 
+for `@xxxAsJson()`, transformKey is by default `true`;
+
 ##### Serialization
 
 -   `@serializeAs(type : ClassConstructor, customKey? : string)`
 -   `@serializeAsMap(type : ClassConstructor, customKey? : string)`
 -   `@serializeAsArray(type : ClassConstructor, customKey? : string)`
 -   `@serializeUsing(transform : SerializerFn, customKey? : string)`
--   `@serializeAsJson(customKey? : string)`
+-   `@serializeAsJson({ keyName?: string, transformKey?: boolean })`
 
 ##### Deserialization
 
@@ -200,7 +202,7 @@ If you want the same behavior for a property when serializing and deserializing,
 -   `@deserializeAsArray(type : ClassConstructor, customKey? : string)`
 -   `@deserializeAsMap(type : ClassConstructor, customKey? : string)`
 -   `@deserializeUsing(transform : DeserializerFn, customKey? : string)`
--   `@deserializeAsJson(customKey? : string)`
+-   `@deserializeAsJson({ keyName?: string, transformKey?: boolean })`
 
 ##### Serialization and Deserialization
 
@@ -208,7 +210,7 @@ If you want the same behavior for a property when serializing and deserializing,
 -   `@autoserializeAsMap(type : ClassConstructor, customKey? : string)`
 -   `@autoserializeAsArray(type : ClassConstructor, customKey? : string)`
 -   `@autoserializeUsing(transforms : SerializeAndDeserializeFns, customKey? : string)`
--   `@autoserializeAsJson(customKey? : string)`
+-   `@autoserializeAsJson({ keyName?: string, transformKey?: boolean })`
 
 ##### Types
 
