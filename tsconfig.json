@@ -10,14 +10,15 @@
 		"stripInternal": true,
 		"strictNullChecks": true,
 		"experimentalDecorators": true,
-		"importHelpers": false,
+		"importHelpers": true,
 		"noEmitHelpers": true,
-		"declaration": true,
 		"noEmit": false,
 		"emitDeclarationOnly": false,
+		"declaration": true,
 		"sourceMap": true,
 		"moduleResolution": "node",
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist"]

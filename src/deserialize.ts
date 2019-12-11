@@ -9,7 +9,11 @@ import {
 } from "./interfaces";
 import { getTarget, isPrimitiveType } from "./util";
 import { MetaData, MetaDataFlag } from "./meta_data";
-import { isUndefined, isNil, isObject, isFunction } from "lodash";
+// import isNil from "lodash/isNil";
+// import isUndefined from "lodash/isUndefined";
+// import isObject from "lodash/isObject";
+// import isFunction from "lodash/isFunction";
+import { default as _ } from "./my-lodash";
 
 export function DeserializeMap<T>(
 	data: JsonObject,
@@ -17,7 +21,7 @@ export function DeserializeMap<T>(
 	target?: Indexable<T>,
 	instantiationMethod?: InstantiationMethod
 ): Indexable<T> | null {
-	if (isUndefined(instantiationMethod)) {
+	if (_.isUndefined(instantiationMethod)) {
 		instantiationMethod = MetaData.deserializeInstantationMethod;
 	}
 
@@ -27,16 +31,16 @@ export function DeserializeMap<T>(
 		);
 	}
 
-	if (isNil(target)) target = {};
+	if (_.isNil(target)) target = {};
 
-	if (isNil(data)) {
+	if (_.isNil(data)) {
 		return null;
 	}
 
 	const keys = Object.keys(data);
 	for (const key of keys) {
 		const value = data[key];
-		if (!isUndefined(value)) {
+		if (!_.isUndefined(value)) {
 			target[MetaData.deserializeKeyTransform(key)] = _Deserialize(
 				data[key] as JsonObject,
 				type,
@@ -54,7 +58,7 @@ export function DeserializeArray<T>(
 	target?: Array<T>,
 	instantiationMethod?: InstantiationMethod
 ) {
-	if (isUndefined(instantiationMethod)) {
+	if (_.isUndefined(instantiationMethod)) {
 		instantiationMethod = MetaData.deserializeInstantationMethod;
 	}
 
@@ -116,14 +120,14 @@ export function DeserializeJSON<T extends JsonType>(
 		return target;
 	}
 
-	if (isObject(data)) {
-		const retn = (isObject(target) ? target : {}) as Indexable<JsonType>;
+	if (_.isObject(data)) {
+		const retn = (_.isObject(target) ? target : {}) as Indexable<JsonType>;
 
 		const keys = Object.keys(data);
 
 		for (const key of keys) {
 			const value = (data as Indexable<JsonType>)[key];
-			if (!isUndefined(value)) {
+			if (!_.isUndefined(value)) {
 				const retnKey = transformKeys
 					? MetaData.deserializeKeyTransform(key)
 					: key;
@@ -135,7 +139,7 @@ export function DeserializeJSON<T extends JsonType>(
 		}
 
 		return retn;
-	} else if (isFunction(data)) {
+	} else if (_.isFunction(data)) {
 		throw new Error(
 			"Cannot deserialize a function, input is not a valid json object"
 		);
@@ -195,7 +199,7 @@ function _Deserialize<T extends Indexable>(
 					: metadata.deserializedKey
 			];
 
-		if (isUndefined(source)) continue;
+		if (_.isUndefined(source)) continue;
 
 		let keyName = metadata.keyName;
 		const flags = metadata.flags;
@@ -245,7 +249,7 @@ function _Deserialize<T extends Indexable>(
 		}
 	}
 
-	if (isFunction(type.onDeserialized)) {
+	if (_.isFunction(type.onDeserialized)) {
 		const value = type.onDeserialized(
 			data,
 			target as T,
@@ -263,7 +267,7 @@ export function Deserialize<T>(
 	target?: T,
 	instantiationMethod?: InstantiationMethod
 ): T | null {
-	if (isUndefined(instantiationMethod)) {
+	if (_.isUndefined(instantiationMethod)) {
 		instantiationMethod = MetaData.deserializeInstantationMethod;
 	}
 

@@ -1,5 +1,5 @@
 import { SerializableType, InstantiationMethod } from "./interfaces";
-import { isNil, isNull } from "lodash";
+import isNil from "lodash/isNil";
 
 /** @internal */
 export function getTarget<T>(
@@ -9,7 +9,7 @@ export function getTarget<T>(
 ): T {
 	if (!isNil(target)) return target;
 
-	if (!isNull(type)) {
+	if (type !== null) {
 		switch (instantiationMethod) {
 			case InstantiationMethod.New:
 				return new type();

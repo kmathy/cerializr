@@ -1,4 +1,6 @@
-import { camelCase, snakeCase, kebabCase } from "lodash";
+import camelCase from "lodash/camelCase";
+import snakeCase from "lodash/snakeCase";
+import kebabCase from "lodash/kebabCase";
 
 /**
  * Does nothing to the string

@@ -7,15 +7,8 @@ import {
 } from "./interfaces";
 import { isPrimitiveType } from "./util";
 import { MetaData, MetaDataFlag } from "./meta_data";
-import {
-	isNil,
-	isNull,
-	isUndefined,
-	isObjectLike,
-	isFunction,
-	isRegExp,
-	isDate,
-} from "lodash";
+import { default as _ } from "./my-lodash";
+import isObjectLike from "lodash/isObjectLike";
 
 /**
  * takes an indexable object ie `<T>{ [idx: string] : T }` and for each key serializes
@@ -34,7 +27,7 @@ export function SerializeMap<T extends Indexable>(
 
 	keys.forEach(key => {
 		const value = source[key];
-		if (!isUndefined(value)) {
+		if (!_.isUndefined(value)) {
 			target[MetaData.serializeKeyTransform(key)] = Serialize(
 				value,
 				type
@@ -64,7 +57,7 @@ export function SerializePrimitive<T>(
 	source: SerializablePrimitiveType,
 	type: SerializablePrimitiveType
 ): JsonType {
-	if (isNil(source)) {
+	if (_.isNil(source)) {
 		return null;
 	}
 
@@ -92,21 +85,21 @@ export function SerializePrimitive<T>(
  * @return JsonType
  */
 export function SerializeJSON(source: any, transformKeys = true): JsonType {
-	if (isNil(source)) return null;
+	if (_.isNil(source)) return null;
 
 	if (Array.isArray(source)) {
 		return source.map(val => SerializeJSON(val, transformKeys));
 	}
 
 	if (isObjectLike(source)) {
-		if (isDate(source) || isRegExp(source)) {
+		if (_.isDate(source) || _.isRegExp(source)) {
 			return source.toString();
 		} else {
 			const sourceIndexed: Indexable<JsonType> = {};
 			const keys = Object.keys(source);
 			keys.forEach(key => {
 				const value = source[key];
-				if (!isUndefined(value)) {
+				if (!_.isUndefined(value)) {
 					const sourceIndexedKey = transformKeys
 						? MetaData.serializeKeyTransform(key)
 						: key;
@@ -118,7 +111,7 @@ export function SerializeJSON(source: any, transformKeys = true): JsonType {
 			});
 			return sourceIndexed;
 		}
-	} else if (isFunction(source)) {
+	} else if (_.isFunction(source)) {
 		return null;
 	}
 
@@ -136,14 +129,14 @@ export function Serialize<T>(
 	instance: T,
 	type: SerializableType<T>
 ): JsonObject | null {
-	if (isNil(instance)) {
+	if (_.isNil(instance)) {
 		return null;
 	}
 
 	const metadataList = MetaData.getMetaDataForType(type);
 
 	// todo -- maybe move this to a Generic deserialize
-	if (isNull(metadataList)) {
+	if (metadataList === null) {
 		return isPrimitiveType(type)
 			? (SerializePrimitive(
 					(instance as unknown) as SerializablePrimitiveType,
@@ -155,20 +148,20 @@ export function Serialize<T>(
 	const target: Indexable<JsonType> = {};
 
 	metadataList.forEach(metadata => {
-		if (isNull(metadata.serializedKey)) return;
+		if (metadata.serializedKey === null) return;
 
 		const source = (instance as any)[metadata.keyName];
 
-		if (isUndefined(source)) return;
+		if (_.isUndefined(source)) return;
 
 		const keyName = metadata.getSerializedKey();
 
 		target[keyName] = serializeByFlag(source, metadata);
 	});
 
-	if (isFunction(type.onSerialized)) {
+	if (_.isFunction(type.onSerialized)) {
 		const value = type.onSerialized(target, instance);
-		if (!isUndefined(value)) {
+		if (!_.isUndefined(value)) {
 			return value as JsonObject;
 		}
 	}

@@ -1,7 +1,7 @@
 import { MetaData } from "./meta_data";
 import { NoOp } from "./string_transforms";
 import { InstantiationMethod } from "./interfaces";
-import { isFunction, isNull } from "lodash";
+import isFunction from "lodash/isFunction";
 
 /**
  * Use one of the provided function or use your own custom function.
@@ -42,7 +42,8 @@ export function SetDeserializeKeyTransform(fn: (str: string) => string): void {
 export function SetDefaultInstantiationMethod(
 	instantiationMethod: InstantiationMethod | null
 ): void {
-	MetaData.deserializeInstantationMethod = isNull(instantiationMethod)
-		? InstantiationMethod.New
-		: instantiationMethod;
+	MetaData.deserializeInstantationMethod =
+		instantiationMethod === null
+			? InstantiationMethod.New
+			: instantiationMethod;
 }
