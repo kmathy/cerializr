@@ -191,10 +191,7 @@ function serializeByFlag(source: any, metadata: MetaData): JsonType {
 		case !!(flags & MetaDataFlag.SerializeObject):
 			return Serialize(source, metadata.serializedType);
 		case !!(flags & MetaDataFlag.SerializeJSON):
-			return SerializeJSON(
-				source,
-				!!(flags & MetaDataFlag.SerializeJSONTransformKeys)
-			);
+			return SerializeJSON(source, metadata.transformKey);
 		case !!(flags & MetaDataFlag.SerializeUsing):
 			return (metadata.serializedType as any)(source);
 		default:

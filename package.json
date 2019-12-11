@@ -18,7 +18,7 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"prepublishOnly": "npm run build",
-		"build": "tsc && webpack",
+		"build": "tsc --build",
 		"publish-npm": "np --no-yarn",
 		"test": "jest",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
@@ -27,18 +27,21 @@
 	"devDependencies": {
 		"@babel/core": "^7.7.5",
 		"@babel/plugin-proposal-class-properties": "^7.7.4",
+		"@babel/plugin-proposal-decorators": "^7.7.4",
 		"@babel/preset-env": "^7.7.5",
 		"@babel/preset-typescript": "^7.7.4",
 		"@types/jest": "^24.0.23",
 		"@types/lodash": "^4.14.149",
 		"babel-loader": "^8.0.6",
 		"babel-plugin-lodash": "^3.3.4",
+		"babel-plugin-parameter-decorator": "^1.0.14",
 		"babel-preset-env": "^1.7.0",
 		"circular-dependency-plugin": "^5.2.0",
 		"clean-webpack-plugin": "^3.0.0",
 		"jest": "^24.9.0",
 		"lodash-webpack-plugin": "^0.11.5",
 		"ts-jest": "^24.2.0",
+		"ts-loader": "^6.2.1",
 		"typescript": "^3.7.2",
 		"webpack": "^4.41.2",
 		"webpack-cli": "^3.3.10"

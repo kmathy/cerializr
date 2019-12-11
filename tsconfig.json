@@ -11,9 +11,10 @@
 		"strictNullChecks": true,
 		"experimentalDecorators": true,
 		"importHelpers": false,
-		"noEmitHelpers": false,
+		"noEmitHelpers": true,
 		"declaration": true,
-		"emitDeclarationOnly": true,
+		"noEmit": false,
+		"emitDeclarationOnly": false,
 		"sourceMap": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true

@@ -5,19 +5,13 @@ const CircularDependencyPlugin = require("circular-dependency-plugin");
 
 module.exports = {
 	entry: "./src/index.ts",
+	devtool: "source-map",
 	module: {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				loader: "babel-loader",
+				loader: "ts-loader",
 				exclude: /node_modules/,
-				options: {
-					plugins: [
-						"lodash",
-						"@babel/plugin-proposal-class-properties",
-					],
-					presets: ["@babel/preset-typescript", "@babel/preset-env"],
-				},
 			},
 		],
 	},

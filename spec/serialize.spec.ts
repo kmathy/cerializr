@@ -750,9 +750,9 @@ describe("Serializing", function () {
           });
 
           class Test {
-            @serializeAsJson({transformKeys: true}) value0 : string;
-            @serializeAsJson({transformKeys: true}) value1 : boolean;
-            @serializeAsJson({transformKeys: true}) value2 : number;
+            @serializeAsJson({transformKey: true}) value0 : string;
+            @serializeAsJson({transformKey: true}) value1 : boolean;
+            @serializeAsJson({transformKey: true}) value2 : number;
           }
 
           var s = new Test();
@@ -774,9 +774,9 @@ describe("Serializing", function () {
           });
 
           class Test {
-            @serializeAsJson({ transformKeys: false }) value0 = { v0: "yes", v1: "no" };
-            @serializeAsJson({ transformKeys: false }) value1 : boolean = true;
-            @serializeAsJson({ transformKeys: true }) value2 : number = 100;
+            @serializeAsJson({ transformKey: false }) value0 = { v0: "yes", v1: "no" };
+            @serializeAsJson({ transformKey: false }) value1 : boolean = true;
+            @serializeAsJson({ transformKey: true }) value2 : number = 100;
           }
 
           var s = new Test();
