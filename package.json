@@ -1,6 +1,5 @@
 {
 	"name": "cerializr",
-	"sideEffects": false,
 	"description": "(de)serialization made easy with ES7/Typescript annotations (decorators)",
 	"keywords": [
 		"serialize",
